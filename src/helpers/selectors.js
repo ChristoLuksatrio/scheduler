@@ -3,12 +3,14 @@ const state = {
     {
       id: 1,
       name: "Monday",
-      appointments: [1, 2, 3]
+      appointments: [1, 2, 3],
+      interviewers: [1]
     },
     {
       id: 2,
       name: "Tuesday",
-      appointments: [4, 5]
+      appointments: [4, 5],
+      interviewers: [1, 2]
     }
   ],
   appointments: {
@@ -39,6 +41,19 @@ const state = {
     }
   }
 };
+
+export function getInterviewersForDay(state, day) {
+  const appDay = state.days.filter(data => data.name === day);
+    if (!appDay.length) {
+      return [];
+    } else {
+      const idArray = appDay[0].interviewers;
+      const intArray = idArray.map(id => state.interviewers[id])
+      return intArray;
+      }
+
+    }
+
 
  export function getAppointmentsForDay(state, day) {
 
