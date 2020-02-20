@@ -57,7 +57,7 @@ export default function useApplicationData() {
     interviewers: {}
   })
 
-  useEffect(() => {
+  function renderPage() {
     Promise.all([
       Promise.resolve(axios.get('http://localhost:8001/api/days')),
       Promise.resolve(axios.get('http://localhost:8001/api/appointments')),
@@ -70,22 +70,30 @@ export default function useApplicationData() {
         interviewers: all[2].data
       })
     })
+  }
+
+  useEffect(() => {
+    renderPage()
   }, [])
 
   useEffect(() => {
-    Promise.all([
-      Promise.resolve(axios.get('http://localhost:8001/api/days')),
-      Promise.resolve(axios.get('http://localhost:8001/api/appointments')),
-      Promise.resolve(axios.get('http://localhost:8001/api/interviewers'))
-    ]).then((all) => {
-      dispatch({
-        type: SET_APPLICATION_DATA,
-        days: all[0].data,
-        appointments: all[1].data,
-        interviewers: all[2].data
-      })
-    })
+    renderPage()
   }, [bookInterview])
+
+  // useEffect(() => {
+  //   Promise.all([
+  //     Promise.resolve(axios.get('http://localhost:8001/api/days')),
+  //     Promise.resolve(axios.get('http://localhost:8001/api/appointments')),
+  //     Promise.resolve(axios.get('http://localhost:8001/api/interviewers'))
+  //   ]).then((all) => {
+  //     dispatch({
+  //       type: SET_APPLICATION_DATA,
+  //       days: all[0].data,
+  //       appointments: all[1].data,
+  //       interviewers: all[2].data
+  //     })
+  //   })
+  // }, [])
 
   const setDay = day => dispatch({type: SET_DAY, value: day});
 
