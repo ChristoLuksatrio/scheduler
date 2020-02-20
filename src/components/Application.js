@@ -5,41 +5,51 @@ import DayList from 'components/DayList';
 import "components/Application.scss";
 import Appointment from 'components/Appointment/index';
 import { getAppointmentsForDay, getInterviewersForDay, getInterview } from "helpers/selectors";
+import useApplicationData from 'hooks/useApplicationData';
  
 
-const axios = require('axios');
+// const axios = require('axios');
 
 export default function Application(props) {
 
-  const [state, setState] = useState({
-    day: 'Monday',
-    days: [],
-    appointments: {},
-    interviewers: {}
-  })
+  const {
+    state,
+    setDay,
+    bookInterview,
+    cancelInterview
+  } = useApplicationData();
+
+  console.log(state)
+
+  // const [state, setState] = useState({
+  //   day: 'Monday',
+  //   days: [],
+  //   appointments: {},
+  //   interviewers: {}
+  // })
 
 
 
-  // We only need one active day at a time so we don't need to do the callback
-  const setDay = day => setState({...state, day});
+  // // We only need one active day at a time so we don't need to do the callback
+  // const setDay = day => setState({...state, day});
 
   
 
 
-  useEffect(() => {
-    Promise.all([
-      Promise.resolve(axios.get('http://localhost:8001/api/days')),
-      Promise.resolve(axios.get('http://localhost:8001/api/appointments')),
-      Promise.resolve(axios.get('http://localhost:8001/api/interviewers'))
-    ]).then((all) => {
-      setState(() => ({
-        ...state,
-        days: all[0].data,
-        appointments: all[1].data,
-        interviewers: all[2].data
-      }))
-    })
-  }, [])
+  // useEffect(() => {
+  //   Promise.all([
+  //     Promise.resolve(axios.get('http://localhost:8001/api/days')),
+  //     Promise.resolve(axios.get('http://localhost:8001/api/appointments')),
+  //     Promise.resolve(axios.get('http://localhost:8001/api/interviewers'))
+  //   ]).then((all) => {
+  //     setState(() => ({
+  //       ...state,
+  //       days: all[0].data,
+  //       appointments: all[1].data,
+  //       interviewers: all[2].data
+  //     }))
+  //   })
+  // }, [])
 
 
   // Retrieves all appointments for a day
@@ -47,47 +57,47 @@ export default function Application(props) {
   // Retrieves list of interviewers when user wants to create a new appointment
   const interviewers = getInterviewersForDay(state, state.day);
 
-  function cancelInterview(id, interview) {
-    const appointment = {
-      ...state.appointments[id],
-      interview: { ...interview }
-    };
+  // function cancelInterview(id, interview) {
+  //   const appointment = {
+  //     ...state.appointments[id],
+  //     interview: { ...interview }
+  //   };
 
-    const appointments = {
-      ...state.appointments,
-      [id]: appointment
-    };
-
-
-    return axios.delete(`http://localhost:8001/api/appointments/${id}`, appointment)
-      .then(() =>
-        setState({
-          ...state,
-          appointments
-        })
-      )
-  }
-
-  function bookInterview(id, interview) {
-    const appointment = {
-      ...state.appointments[id],
-      interview: { ...interview }
-    };
-
-    const appointments = {
-      ...state.appointments,
-      [id]: appointment
-    };
+  //   const appointments = {
+  //     ...state.appointments,
+  //     [id]: appointment
+  //   };
 
 
-    return axios.put(`http://localhost:8001/api/appointments/${id}`, appointment)
-      .then(() =>
-        setState({
-          ...state,
-          appointments
-        })
-      )
-  };
+  //   return axios.delete(`http://localhost:8001/api/appointments/${id}`, appointment)
+  //     .then(() =>
+  //       setState({
+  //         ...state,
+  //         appointments
+  //       })
+  //     )
+  // }
+
+  // function bookInterview(id, interview) {
+  //   const appointment = {
+  //     ...state.appointments[id],
+  //     interview: { ...interview }
+  //   };
+
+  //   const appointments = {
+  //     ...state.appointments,
+  //     [id]: appointment
+  //   };
+
+
+  //   return axios.put(`http://localhost:8001/api/appointments/${id}`, appointment)
+  //     .then(() =>
+  //       setState({
+  //         ...state,
+  //         appointments
+  //       })
+  //     )
+  // };
 
   
   const schedule = appointments.map(appointment => {
