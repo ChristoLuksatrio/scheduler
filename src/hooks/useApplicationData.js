@@ -21,9 +21,24 @@ function reducer(state, action) {
         interviewers: action.interviewers
        }
     case SET_INTERVIEW: {
+      // console.log('ACTION', action)
+      // need to be more specific in placing the data within appointments
+
+      const appointment = {
+        ...state.appointments[action.id],
+        interview: { ...action.interview }
+      };
+
+      const appointments = {
+        ...state.appointments,
+        [action.id]: appointment
+      };
+
       return {
         ...state,
-        interview: action.value
+        appointments
+        // id: action.id,
+        // interview: action.interview
       }
     }
     default:
@@ -65,16 +80,13 @@ export default function useApplicationData() {
       interview: { ...interview }
     };
 
-    const appointments = {
-      ...state.appointments,
-      [id]: appointment
-    };
 
     return axios.delete(`http://localhost:8001/api/appointments/${id}`, appointment)
       .then(() =>
         dispatch({
           type: SET_INTERVIEW,
-          value: appointments
+          id,
+          interview: null
         })
       )
   }
@@ -84,18 +96,14 @@ export default function useApplicationData() {
       ...state.appointments[id],
       interview: { ...interview }
     };
-
-    const appointments = {
-      ...state.appointments,
-      [id]: appointment
-    };
-
+    
 
     return axios.put(`http://localhost:8001/api/appointments/${id}`, appointment)
       .then(() =>
         dispatch({
           type: SET_INTERVIEW,
-          value: appointments
+          id,
+          interview
         })
       )
   };
