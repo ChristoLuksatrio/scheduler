@@ -21,8 +21,8 @@ function reducer(state, action) {
         interviewers: action.interviewers
        }
     case SET_INTERVIEW: {
-      // console.log('ACTION', action)
-      // need to be more specific in placing the data within appointments
+      console.log('state is', state);
+
 
       const appointment = {
         ...state.appointments[action.id],
@@ -34,11 +34,11 @@ function reducer(state, action) {
         [action.id]: appointment
       };
 
+      console.log('appointments is', appointments)
+
       return {
         ...state,
         appointments
-        // id: action.id,
-        // interview: action.interview
       }
     }
     default:
@@ -71,6 +71,21 @@ export default function useApplicationData() {
       })
     })
   }, [])
+
+  useEffect(() => {
+    Promise.all([
+      Promise.resolve(axios.get('http://localhost:8001/api/days')),
+      Promise.resolve(axios.get('http://localhost:8001/api/appointments')),
+      Promise.resolve(axios.get('http://localhost:8001/api/interviewers'))
+    ]).then((all) => {
+      dispatch({
+        type: SET_APPLICATION_DATA,
+        days: all[0].data,
+        appointments: all[1].data,
+        interviewers: all[2].data
+      })
+    })
+  }, [bookInterview])
 
   const setDay = day => dispatch({type: SET_DAY, value: day});
 

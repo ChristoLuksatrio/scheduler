@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import DayList from 'components/DayList';
 
 
@@ -23,6 +23,7 @@ export default function Application(props) {
   // Retrieves list of interviewers when user wants to create a new appointment
   const interviewers = getInterviewersForDay(state, state.day);
 
+  // console.log(state.days)
 
   
   const schedule = appointments.map(appointment => {
