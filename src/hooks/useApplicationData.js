@@ -1,5 +1,5 @@
 import { useReducer, useEffect } from 'react';
-const axios = require('axios');
+import axios from 'axios';
 
 
 const SET_DAY = "SET_DAY";
@@ -21,9 +21,6 @@ function reducer(state, action) {
         interviewers: action.interviewers
        }
     case SET_INTERVIEW: {
-      console.log('state is', state);
-
-
       const appointment = {
         ...state.appointments[action.id],
         interview: { ...action.interview }
@@ -34,11 +31,31 @@ function reducer(state, action) {
         [action.id]: appointment
       };
 
-      console.log('appointments is', appointments)
+      const { id, interview } = action
+
 
       return {
         ...state,
-        appointments
+        appointments,
+        days: state.days.map(day => {
+          let spotCheck = 0;
+
+          if (day.name === state.day) {
+            if (interview && state.appointments[id].interview) {
+              spotCheck = 0;
+            } else if (interview) {
+              spotCheck = -1;
+            } else {
+              spotCheck = 1;
+            }
+          }
+
+          return {
+            ...day,
+            spots: day.spots + spotCheck
+          }
+
+        })
       }
     }
     default:
@@ -59,9 +76,9 @@ export default function useApplicationData() {
 
   function renderPage() {
     Promise.all([
-      Promise.resolve(axios.get('http://localhost:8001/api/days')),
-      Promise.resolve(axios.get('http://localhost:8001/api/appointments')),
-      Promise.resolve(axios.get('http://localhost:8001/api/interviewers'))
+      axios.get('http://localhost:8001/api/days'),
+      axios.get('http://localhost:8001/api/appointments'),
+      axios.get('http://localhost:8001/api/interviewers')
     ]).then((all) => {
       dispatch({
         type: SET_APPLICATION_DATA,
@@ -75,25 +92,6 @@ export default function useApplicationData() {
   useEffect(() => {
     renderPage()
   }, [])
-
-  useEffect(() => {
-    renderPage()
-  }, [bookInterview])
-
-  // useEffect(() => {
-  //   Promise.all([
-  //     Promise.resolve(axios.get('http://localhost:8001/api/days')),
-  //     Promise.resolve(axios.get('http://localhost:8001/api/appointments')),
-  //     Promise.resolve(axios.get('http://localhost:8001/api/interviewers'))
-  //   ]).then((all) => {
-  //     dispatch({
-  //       type: SET_APPLICATION_DATA,
-  //       days: all[0].data,
-  //       appointments: all[1].data,
-  //       interviewers: all[2].data
-  //     })
-  //   })
-  // }, [])
 
   const setDay = day => dispatch({type: SET_DAY, value: day});
 

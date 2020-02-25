@@ -6,7 +6,6 @@ import "components/Application.scss";
 import Appointment from 'components/Appointment/index';
 import { getAppointmentsForDay, getInterviewersForDay, getInterview } from "helpers/selectors";
 import useApplicationData from 'hooks/useApplicationData';
- 
 
 
 export default function Application(props) {
