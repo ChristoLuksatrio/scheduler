@@ -1,5 +1,10 @@
 # Interview Scheduler
 
+Interview Scheduler is a single-page web app that allows users to create, edit and delete interview appointments.
+
+!['Screenshot of App'](https://github.com/ChristoLuksatrio/scheduler/blob/master/docs/appointment-main.png?raw=true)
+!['Screenshot of App Edit'](https://github.com/ChristoLuksatrio/scheduler/blob/master/docs/appointment-form.png?raw=true)
+
 ## Setup
 
 Install dependencies with `npm install`.
