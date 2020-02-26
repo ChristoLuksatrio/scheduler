@@ -27,9 +27,7 @@ export default function useApplicationData() {
     function cancelInterview(id, interview) {
         const appointment = {
             ...state.appointments[id],
-            interview: {
-                ... interview
-            }
+            interview: {...interview}
         };
 
 
@@ -39,9 +37,7 @@ export default function useApplicationData() {
     function bookInterview(id, interview) {
         const appointment = {
             ...state.appointments[id],
-            interview: {
-                ... interview
-            }
+            interview: {...interview}
         };
 
 

@@ -6,25 +6,25 @@ export default function reducer(state, action) {
 
     switch (action.type) {
         case SET_DAY: return {
-                ... state,
+                ...state,
                 day: action.value
             }
         case SET_APPLICATION_DATA: return {
-                ... state,
+                ...state,
                 days: action.days,
                 appointments: action.appointments,
                 interviewers: action.interviewers
             }
         case SET_INTERVIEW: {
                 const appointment = {
-                    ... state.appointments[action.id],
+                    ...state.appointments[action.id],
                     interview: {
-                        ... action.interview
+                        ...action.interview
                     }
                 };
 
                 const appointments = {
-                    ... state.appointments,
+                    ...state.appointments,
                     [action.id]: appointment
                 };
 
@@ -32,7 +32,7 @@ export default function reducer(state, action) {
 
 
                 return {
-                    ... state,
+                    ...state,
                     appointments,
                     days: state.days.map(day => {
                         let spotCheck = 0;
